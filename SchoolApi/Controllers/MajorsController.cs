@@ -8,8 +8,8 @@ using System.Web.Http;
 
 namespace SchoolApi.Controllers
 {
-    public class MajorsController : ApiController
-    {
+	public class MajorsController : ApiController
+	{
 		private SchoolContext db = new SchoolContext();
 
 		[HttpGet]
@@ -37,5 +37,33 @@ namespace SchoolApi.Controllers
 			db.SaveChanges();
 			return true;
 		}
+		[HttpPost]
+		[ActionName("Change")]
+		public bool Change(Major major)
+		{
+			if (major == null)
+				return false;
+			if (!ModelState.IsValid)
+				return false;
+			var maj = db.Majors.Find(major.Id);
+			maj.Description = major.Description;
+			maj.MinSat = major.MinSat;
+			db.SaveChanges();
+			return true;
+		}
+		[HttpPost]
+		[ActionName("Remove")]
+		public bool Remove(Major major)
+		{
+			if (major == null)
+				return false;
+			if (!ModelState.IsValid)
+				return false;
+			var ma = db.Majors.Find(major.Id);
+			db.Majors.Remove(ma);
+			db.SaveChanges();
+			return true;
+		}
+
     }
 }
