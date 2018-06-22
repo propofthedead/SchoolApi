@@ -1,4 +1,5 @@
 ﻿using SchoolApi.Models;
+using SchoolApi.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,57 +15,57 @@ namespace SchoolApi.Controllers
 
 		[HttpGet]
 		[ActionName("List")]
-		public IEnumerable<Student> List() {
-			return db.Students.ToList();
+		public JsonResponse List() {
+			return new JsonResponse { Data=db.Students.ToList()};
 		}
 		[HttpGet]
 		[ActionName("Get")]
-		public Student Get(int? id) {
+		public JsonResponse Get(int? id) {
 			if (id == null)
-				return null;
-			return db.Students.Find(id);			
+				return new JsonResponse { Error=null,Message="The value is null",Result="Failed"};
+			return new JsonResponse { Data = db.Students.Find(id) };			
 		}
 
 		[HttpPost]
 		[ActionName("Create")]
-		public bool Create(Student student)
+		public JsonResponse Create(Student student)
 		{
 			if (student == null)
-				return false;
+				return new JsonResponse { Error = null, Message = "The value is null", Result = "Failed" };
 			if (!ModelState.IsValid)
-				return false;
+				return new JsonResponse { Error = null, Message = "The value is not valid", Result = "Failed" };
 			db.Students.Add(student);
 			db.SaveChanges();
-			return true;
+			return new JsonResponse();
 		}
 
 		[HttpPost]
 		[ActionName("Change")]
-		public bool Change(Student student) {
+		public JsonResponse Change(Student student) {
 			if (student == null)
-				return false;
+				return new JsonResponse { Error = null, Message = "The value is null", Result = "Failed" };
 			if (!ModelState.IsValid)
-				return false;
+				return new JsonResponse { Error = null, Message = "The value is not valid", Result = "Failed" }; ;
 			var cha = db.Students.Find(student.Id);
 			cha.MajorId = student.MajorId;
 			cha.Name = student.Name;
 			cha.Sat = student.Sat;
 			cha.Major = student.Major;
 			db.SaveChanges();
-			return true;
+			return new JsonResponse();
 		}
 
 		[HttpPost]
 		[ActionName("Remove")]
-		public bool Remove(Student student) {
+		public JsonResponse Remove(Student student) {
 			if (student == null)
-				return false;
+				return new JsonResponse { Error = null, Message = "The value is null", Result = "Failed" };
 			if (!ModelState.IsValid)
-				return false;
+				return new JsonResponse { Error = null, Message = "The value is not valid", Result = "Failed" };
 			var cha = db.Students.Find(student.Id);
 			db.Students.Remove(cha);
 			db.SaveChanges();
-			return true;
+			return new JsonResponse();
 		}
     }
 }
