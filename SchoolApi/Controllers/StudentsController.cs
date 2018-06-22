@@ -24,5 +24,47 @@ namespace SchoolApi.Controllers
 				return null;
 			return db.Students.Find(id);			
 		}
+
+		[HttpPost]
+		[ActionName("Create")]
+		public bool Create(Student student)
+		{
+			if (student == null)
+				return false;
+			if (!ModelState.IsValid)
+				return false;
+			db.Students.Add(student);
+			db.SaveChanges();
+			return true;
+		}
+
+		[HttpPost]
+		[ActionName("Change")]
+		public bool Change(Student student) {
+			if (student == null)
+				return false;
+			if (!ModelState.IsValid)
+				return false;
+			var cha = db.Students.Find(student.Id);
+			cha.MajorId = student.MajorId;
+			cha.Name = student.Name;
+			cha.Sat = student.Sat;
+			cha.Major = student.Major;
+			db.SaveChanges();
+			return true;
+		}
+
+		[HttpPost]
+		[ActionName("Remove")]
+		public bool Remove(Student student) {
+			if (student == null)
+				return false;
+			if (!ModelState.IsValid)
+				return false;
+			var cha = db.Students.Find(student.Id);
+			db.Students.Remove(cha);
+			db.SaveChanges();
+			return true;
+		}
     }
 }

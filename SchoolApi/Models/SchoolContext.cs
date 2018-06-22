@@ -10,7 +10,7 @@ namespace SchoolApi.Models
 	{
 		public DbSet<Major> Majors { get; set; }
 		public DbSet<Student> Students { get; set; }
-
+		public DbSet<Class> Classes { get; set; }
 		public SchoolContext() : base() { }
 	}
 }
